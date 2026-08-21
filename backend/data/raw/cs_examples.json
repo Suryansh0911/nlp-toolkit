@@ -1,0 +1,77 @@
+[
+    {
+        "task": "summarization",
+        "input": "A binary search tree is a hierarchical data structure in which each node has at most two children. Values smaller than a node are generally placed in its left subtree, while larger values are placed in its right subtree.",
+        "output": "A binary search tree stores ordered values using left and right subtrees, with smaller values on the left and larger values on the right."
+    },
+    {
+        "task": "summarization",
+        "input": "Dynamic programming is an algorithmic technique that solves complex problems by breaking them into overlapping subproblems and storing the results of those subproblems to avoid repeated computation.",
+        "output": "Dynamic programming solves problems using overlapping subproblems and stores previous results to avoid redundant computation."
+    },
+    {
+        "task": "summarization",
+        "input": "A graph is a data structure consisting of vertices and edges. Graphs can be directed or undirected and are commonly used to represent relationships between objects.",
+        "output": "A graph consists of vertices connected by edges and can represent relationships in directed or undirected form."
+    },
+    {
+        "task": "summarization",
+        "input": "A relational database organizes data into tables containing rows and columns. Relationships between tables are commonly represented using keys such as primary keys and foreign keys.",
+        "output": "A relational database stores structured data in tables and uses keys to represent relationships between them."
+    },
+    {
+        "task": "summarization",
+        "input": "A transformer is a neural network architecture that uses self-attention to process relationships between tokens. Transformers are widely used in modern language models.",
+        "output": "Transformers use self-attention to model relationships between tokens and form the basis of many modern language models."
+    },
+    {
+        "task": "question_answering",
+        "input": "Context: A stack is a linear data structure that follows the Last In, First Out principle. Elements are inserted and removed from the top.\nQuestion: What principle does a stack follow?",
+        "output": "Last In, First Out (LIFO)."
+    },
+    {
+        "task": "question_answering",
+        "input": "Context: A queue is a linear data structure in which elements are inserted at the rear and removed from the front. It follows the First In, First Out principle.\nQuestion: What principle does a queue follow?",
+        "output": "First In, First Out (FIFO)."
+    },
+    {
+        "task": "question_answering",
+        "input": "Context: Binary search works on a sorted array by repeatedly comparing the target with the middle element and eliminating half of the remaining search space.\nQuestion: What prerequisite does binary search require?",
+        "output": "The data must be sorted."
+    },
+    {
+        "task": "question_answering",
+        "input": "Context: Breadth-first search explores a graph level by level and commonly uses a queue to manage vertices that need to be processed.\nQuestion: What data structure is commonly used by BFS?",
+        "output": "A queue."
+    },
+    {
+        "task": "question_answering",
+        "input": "Context: Gradient descent is an optimization algorithm that updates model parameters in the direction opposite to the gradient of the loss function.\nQuestion: In which direction does gradient descent update the parameters?",
+        "output": "In the direction opposite to the gradient of the loss function."
+    },
+    {
+        "task": "completion",
+        "input": "Binary search is an efficient searching algorithm that",
+        "output": "works on sorted data by repeatedly dividing the search space in half."
+    },
+    {
+        "task": "completion",
+        "input": "A linked list is a linear data structure in which",
+        "output": "elements are stored in nodes and each node contains data along with a reference to another node."
+    },
+    {
+        "task": "completion",
+        "input": "Breadth-first search explores a graph",
+        "output": "level by level, usually using a queue."
+    },
+    {
+        "task": "completion",
+        "input": "Self-attention allows a transformer to",
+        "output": "determine how strongly different tokens should influence one another."
+    },
+    {
+        "task": "completion",
+        "input": "Gradient descent attempts to minimize a loss function by",
+        "output": "iteratively updating model parameters in the direction that reduces the loss."
+    }
+]
