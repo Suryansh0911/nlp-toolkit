@@ -1,0 +1,18 @@
+Metadata-Version: 2.4
+Name: nlp-toolkit
+Version: 0.1.0
+Summary: Add your description here
+Author-email: Suryansh0911 <suryanshgupta0911@gmail.com>
+Requires-Python: >=3.11
+Description-Content-Type: text/markdown
+Requires-Dist: accelerate>=1.14.0
+Requires-Dist: dataset>=2.0.0
+Requires-Dist: datasets>=5.0.1
+Requires-Dist: evaluate>=0.4.6
+Requires-Dist: peft>=0.20.0
+Requires-Dist: rouge-score>=0.1.2
+Requires-Dist: safetensors>=0.8.0
+Requires-Dist: sentencepiece>=0.2.2
+Requires-Dist: torch>=2.13.0
+Requires-Dist: transformers>=5.15.0
+Requires-Dist: trl>=1.10.0

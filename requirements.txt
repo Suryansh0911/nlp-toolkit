@@ -1,0 +1,11 @@
+torch
+transformers
+datasets
+accelerate
+sentencepiece
+safetensors
+peft
+trl
+evaluate
+rouge_score
+bitsandbytes
