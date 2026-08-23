@@ -57,7 +57,7 @@ def load_model(method: str):
 
         model = AutoModelForCausalLM.from_pretrained(
             MODEL_NAME, quantization_config=quantization_config,
-            torch_dtype=torch.float16,
+            dtype=torch.float16,
             device_map="auto"
         )
 
@@ -103,7 +103,7 @@ def main():
         max_length=512,
         packing=False,
         gradient_checkpointing=True,
-        fp16=(args.method == "qlora" and torch.cuda.is_available()),
+        fp16=False,
         bf16=False,
         seed=42
     )
