@@ -6,7 +6,8 @@ def load_raw_dataset():
     path = base_dir / "data" / "raw" / "cs_examples.json"
 
     with open(path, "r", encoding="utf-8") as f:
-        return json.load(f)
+        data = json.load(f)
+    return Dataset.from_list(data)
 
 
 def load_task_dataset(dataset : Dataset, task: str) -> Dataset:
