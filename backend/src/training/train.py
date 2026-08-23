@@ -3,7 +3,7 @@ from peft import get_peft_model, prepare_model_for_kbit_training
 from transformers import AutoModelForCausalLM, AutoTokenizer, BitsAndBytesConfig
 from trl import SFTConfig, SFTTrainer
 import torch
-from src.data.task_dataset import load_raw_dataset, load_task_dataset
+from src.data.task_dataset import load_raw_dataset, load_task_dataset, split_dataset
 from src.training.training_format import create_training_text
 from src.training.lora_config import create_lora_config
 
@@ -71,22 +71,53 @@ def load_model(method: str):
 def main():
 
     args = parse_args()
-    output_dir = (args.output_dir or f"adapters/{args.task}/{args.method}")
+
+    output_dir = (
+        args.output_dir
+        or f"adapters/{args.task}/{args.method}"
+    )
 
     dataset = load_raw_dataset()
     dataset = load_task_dataset(dataset, args.task)
+
+    train_dataset, validation_dataset, test_dataset = split_dataset(
+        dataset,
+        seed=42,
+    )
+
+    print("\nDataset split:")
+    print(f"Total:      {len(dataset)}")
+    print(f"Train:      {len(train_dataset)}")
+    print(f"Validation: {len(validation_dataset)}")
+    print(f"Test:       {len(test_dataset)}")
 
     tokenizer = AutoTokenizer.from_pretrained(MODEL_NAME)
 
     if tokenizer.pad_token is None:
         tokenizer.pad_token = tokenizer.eos_token
 
-    dataset = dataset.map(lambda example: create_training_text(example, tokenizer))
+    train_dataset = train_dataset.map(
+        lambda example: create_training_text(
+            example,
+            tokenizer
+        )
+    )
+
+    validation_dataset = validation_dataset.map(
+        lambda example: create_training_text(
+            example,
+            tokenizer
+        )
+    )
 
     model = load_model(args.method)
 
     lora_config = create_lora_config()
-    model = get_peft_model(model, lora_config)
+
+    model = get_peft_model(
+        model,
+        lora_config
+    )
 
     model.print_trainable_parameters()
 
@@ -105,17 +136,23 @@ def main():
         gradient_checkpointing=True,
         fp16=False,
         bf16=False,
-        seed=42
+        seed=42,
     )
 
+
     trainer = SFTTrainer(
-        model = model,
-        args = training_args,
-        train_dataset = dataset,
-        processing_class = tokenizer
+        model=model,
+        args=training_args,
+
+        train_dataset=train_dataset,
+        eval_dataset=validation_dataset,
+
+        processing_class=tokenizer,
     )
 
     trainer.train()
+
+
     trainer.save_model(output_dir)
     tokenizer.save_pretrained(output_dir)
 
