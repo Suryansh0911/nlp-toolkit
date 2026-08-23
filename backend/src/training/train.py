@@ -26,6 +26,13 @@ def parse_args():
         "--output_dir", default=None
     )
 
+    parser.add_argument(
+        "--epochs",
+        type=int,
+        default=1,
+        help="Number of training epochs"
+    )
+
     return parser.parse_args()
 
 def load_model(method: str):
