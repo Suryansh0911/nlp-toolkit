@@ -1,5 +1,6 @@
 import argparse
 import json
+import torch
 from collections import defaultdict
 from src.data.task_dataset import load_raw_dataset
 from src.data.formatting import format_inference_messages
@@ -44,9 +45,30 @@ def parse_args():
     )
 
     parser.add_argument(
+        "--max_new_tokens",
+        type=int,
+        default=128,
+        help="Maximum new tokens to generate (default: 128)",
+    )
+
+    parser.add_argument(
+        "--batch_size",
+        type=int,
+        default=1,
+        help="Batch size for inference (default: 1)",
+    )
+
+    parser.add_argument(
         "--save_results",
         default=None,
         help="Path to save evaluation results as JSON (optional)",
+    )
+
+    parser.add_argument(
+        "--use_gpu",
+        action="store_true",
+        default=True,
+        help="Use GPU if available (default: True)",
     )
 
     return parser.parse_args()
@@ -54,6 +76,14 @@ def parse_args():
 
 def main():
     args = parse_args()
+
+    # Check GPU availability
+    device = "cuda" if torch.cuda.is_available() and args.use_gpu else "cpu"
+    print(f"\nUsing device: {device.upper()}")
+
+    if device == "cuda":
+        print(f"GPU: {torch.cuda.get_device_name(0)}")
+        print(f"GPU Memory: {torch.cuda.get_device_properties(0).total_memory / 1e9:.2f} GB")
 
     # Load dataset
     dataset = load_raw_dataset()
@@ -68,9 +98,15 @@ def main():
         examples = examples[:args.max_examples]
 
     print(f"\nEvaluating {len(examples)} examples for task: {args.task}")
+    print(f"Max new tokens: {args.max_new_tokens}")
 
     # Load model
     model = BaseModel()
+
+    # Move model to device
+    if device == "cuda":
+        model.model = model.model.to(device)
+        model.device = device
 
     # Load adapter if provided
     if args.adapter:
@@ -78,15 +114,24 @@ def main():
         model.model = PeftModel.from_pretrained(model.model, args.adapter)
         model.model.eval()
 
+        # Move to GPU after loading adapter
+        if device == "cuda":
+            model.model = model.model.to(device)
+
     predictions = []
 
     # Run inference
+    print(f"\nStarting evaluation...")
+
     for i, example in enumerate(examples):
-        if (i + 1) % 10 == 0:
+        if (i + 1) % 5 == 0 or i == 0:
             print(f"  Processing {i + 1}/{len(examples)}...")
 
         messages = format_inference_messages(example)
-        prediction = model.generate_messages(messages, max_new_tokens=512)
+        prediction = model.generate_messages(
+            messages,
+            max_new_tokens=args.max_new_tokens
+        )
 
         predictions.append({
             "input": example["input"],
@@ -107,6 +152,8 @@ def main():
         "task": args.task,
         "num_examples": len(examples),
         "adapter": args.adapter,
+        "max_new_tokens": args.max_new_tokens,
+        "device": device,
     }
 
     if args.task == "question_answering":
