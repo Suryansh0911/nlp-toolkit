@@ -8,8 +8,17 @@ __pycache__/
 .ipynb_checkpoints/
 
 models/*
-adapters/*
 checkpoints/*
+
+# Keep adapter directory structure but ignore training outputs
+adapters/**/*.safetensors
+adapters/**/*.bin
+adapters/**/*.pt
+adapters/**/*.pth
+adapters/**/checkpoint-*
+
+# Allow .gitkeep files
+!adapters/**/.gitkeep
 
 *.bin
 *.safetensors

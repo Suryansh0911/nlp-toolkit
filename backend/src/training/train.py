@@ -19,7 +19,7 @@ def parse_args():
 
     parser.add_argument(
         "--method", default="lora",
-        choices=["lora", "qlora"]
+        choices=["base", "lora", "qlora"]
     )
 
     parser.add_argument(
@@ -36,6 +36,10 @@ def parse_args():
     return parser.parse_args()
 
 def load_model(method: str):
+
+    if method.strip().lower() == "base":
+        model = AutoModelForCausalLM.from_pretrained(MODEL_NAME)
+        return model
 
     if method.strip().lower() == "lora":
         model = AutoModelForCausalLM.from_pretrained(MODEL_NAME)
@@ -112,14 +116,19 @@ def main():
 
     model = load_model(args.method)
 
-    lora_config = create_lora_config()
-
-    model = get_peft_model(
-        model,
-        lora_config
-    )
-
-    model.print_trainable_parameters()
+    # Apply LoRA only for lora and qlora methods
+    if args.method in ["lora", "qlora"]:
+        lora_config = create_lora_config()
+        model = get_peft_model(
+            model,
+            lora_config
+        )
+        model.print_trainable_parameters()
+    else:
+        print("Training with full fine-tuning (base method)")
+        trainable_params = sum(p.numel() for p in model.parameters() if p.requires_grad)
+        total_params = sum(p.numel() for p in model.parameters())
+        print(f"Trainable parameters: {trainable_params:,} / {total_params:,} (100%)")
 
     training_args = SFTConfig(
         output_dir=output_dir,

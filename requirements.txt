@@ -9,3 +9,4 @@ trl
 evaluate
 rouge_score
 bitsandbytes
+scipy

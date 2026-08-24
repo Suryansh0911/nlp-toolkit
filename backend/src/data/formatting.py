@@ -84,16 +84,16 @@ def format_inference_messages(example):
 
     task = example["task"]
 
-    system_message = ("Your are an expert Computer Science Assistant.")
+    system_message = ("You are an expert Computer Science Assistant.")
 
     if task == "summarization":
-        user_message = ("Summarize the following Computer Science text: \n\n"
+        user_message = ("Summarize the following Computer Science text:\n\n"
                         + example["input"])
     elif task == "question_answering":
-            user_message = ("Answer the question using the provided context: \n\n"
+            user_message = ("Answer the question using the provided context:\n\n"
                             + example["input"])
     elif task == "completion":
-            user_message = ("Complete the following Computer Science text: \n\n"
+            user_message = ("Complete the following Computer Science text:\n\n"
                             + example["input"])
     else:
 

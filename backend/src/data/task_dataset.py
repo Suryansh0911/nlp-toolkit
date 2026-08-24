@@ -5,7 +5,7 @@ from pathlib import Path
 
 def load_raw_dataset() -> Dataset:
     base_dir = Path(__file__).resolve().parents[2]
-    path = base_dir / "data" / "raw" / "cs_examples.json"
+    path = base_dir / "data" / "raw" / "cs_examples_unified.json"
 
     with open(path, "r", encoding="utf-8") as f:
         data = json.load(f)
