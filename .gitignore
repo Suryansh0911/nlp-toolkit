@@ -1,7 +1,7 @@
 .venv/
 __pycache__/
 *.pyc
-
+C:\Users\surya\OneDrive\Desktop\nlp-toolkit\backend\scripts
 .env
 .env.*
 
